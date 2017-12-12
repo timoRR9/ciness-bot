@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js"
   },
-  "author": "Microsoft Corp.",
+  "author": "Groupe 9",
   "license": "MIT",
   "keywords": [
     "botbuilder",
@@ -13,14 +13,11 @@
     "chatbots",
     "botbuilder-samples"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/BotBuilder-Samples.git"
-  },
   "dependencies": {
     "bluebird": "^3.4.7",
     "botbuilder": "^3.8.2",
     "dotenv-extended": "^1.0.4",
+    "moviedb": "^0.2.10",
     "request": "^2.79.0",
     "restify": "^4.3.0"
   }
