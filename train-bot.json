@@ -1,0 +1,50 @@
+[
+	{
+		"text": "batman trailer",
+		"intent": "Movie.GetTrailer",
+		"entities":
+		[
+		{
+			"entity": "Movie.Title",
+			"startPos": 0,
+			"endPos": 5
+		}
+		]
+    },
+    {
+		"text": "batman preview",
+		"intent": "Movie.GetTrailer",
+		"entities":
+		[
+		{
+			"entity": "Movie.Title",
+			"startPos": 0,
+			"endPos": 5
+		}
+		]
+    },
+    {
+		"text": "Blade Runner trailer",
+		"intent": "Movie.GetTrailer",
+		"entities":
+		[
+		{
+			"entity": "Movie.Title",
+			"startPos": 0,
+			"endPos": 11
+		}
+		]
+    },
+    {
+		"text": "Blade Runner preview",
+		"intent": "Movie.GetTrailer",
+		"entities":
+		[
+		{
+			"entity": "Movie.Title",
+			"startPos": 0,
+			"endPos": 11
+		}
+		]
+    }
+]
