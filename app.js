@@ -53,6 +53,43 @@ bot.dialog('SearchFilms',
     matches: 'SearchFilms'
 });
 
+bot.dialog('Movie.GetTrailer',
+    function (session, args, next) {
+        var movieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
+        if (movieEntity) {
+            MovieDB.searchMovie({ query: movieEntity.entity }, (err, res) => {
+              var movie = res.results[0];
+              var movies = [];
+              console.log(movie.id);
+              MovieDB.movieVideos({ id: movie.id }, (err, res) => {
+                var results = res.results;
+                var ytKey = "";
+                if(results.length > 1){
+                  for(var result in results){
+                    if(result.type == "Trailer"){
+                      ytKey = result.key;
+                    }
+                  }
+                }else{
+                  ytKey = results[0].key;
+                }
+				var info = {
+					movieTitle: movie.title,
+					ytKey: ytKey
+				}
+                var message = new builder.Message()
+                .addAttachment(trailerCard(info));
+                session.send(message);
+                session.endDialog();
+              });
+            });
+        }
+        else { Prompts.text(session, 'Please enter a film'); }
+    }).triggerAction({
+    matches: 'Movie.GetTrailer'
+});
+
 // Spell Check
 if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
     bot.use({
@@ -78,4 +115,12 @@ function infoAsAttachment(info) {
         .subtitle(info.release_date)
         .text(info.overview)
         .images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
+}
+
+function trailerCard(info){
+	return new builder.VideoCard()
+		.title(info.movieTitle)
+		.media([
+			{ url: 'https://www.youtube.com/watch?v=' + info.ytKey }
+		]);
 }
