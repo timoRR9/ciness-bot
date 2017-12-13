@@ -31,31 +31,40 @@ bot.dialog('Help', function (session) {
 	matches: 'Help'
 });
 
-bot.dialog('SearchFilms',
+bot.dialog('MovieGetAllInformations',
 	function (session, args, next) {
-		var movieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'MovieTitle');
-		var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
-		if (movieEntity) {
-			MovieDB.searchMovie({ query: movieEntity.entity }, (err, res) => {
-				if (res.results.length == 0){
-					session.send('Sorry, we did not found the movie called ' + movieEntity.entity, session.message.text);
-					session.endDialog();
-				} else {
-					var movie = res.results[0];
-					var movies = [];
-					movies.push(movie);
-					var message = new builder.Message()
-					.attachmentLayout(builder.AttachmentLayout.carousel)
-					.attachments(movies.map(infoAsAttachment));
-					session.send(message);
-					session.endDialog();
-				}
-			});
-		}
-		else { Prompts.text(session, 'Please enter a film'); }
+		var movieTitle = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+		var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+		if (movieTitle) {
+			if (videoType.entity == 'movie') {
+				MovieDB.searchMovie({ query: movieTitle.entity }, (err, res) => {
+					displayMoviesGlobalInfos(session, res, 'Movie');
+				});
+			} else {
+				MovieDB.searchTv({ query: movieTitle.entity }, (err, res) => {
+					displayMoviesGlobalInfos(session, res, 'Tv show');
+				});
+			}
+		} else { Prompts.text(session, 'Please enter a film'); }
 	}).triggerAction({
-	matches: 'SearchFilms'
+	matches: 'Movie.GetAllInformations'
 });
+
+function displayMoviesGlobalInfos(session, res, videoType){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
+		session.endDialog();
+	} else {
+		var movie = res.results[0];
+		var movies = [];
+		movies.push(movie);
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(movies.map(infoAsAttachment));
+		session.send(message);
+		session.endDialog();
+	}
+}
 
 // Spell Check
 if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
