@@ -55,9 +55,10 @@ function displayMoviesGlobalInfos(session, res, videoType){
 		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
 		session.endDialog();
 	} else {
-		var movie = res.results[0];
 		var movies = [];
-		movies.push(movie);
+		for (var i = 0; i < res.results.length; i++) {
+			movies.push(res.results[i]);
+		}
 		var message = new builder.Message()
 		.attachmentLayout(builder.AttachmentLayout.carousel)
 		.attachments(movies.map(infoAsAttachment));
@@ -86,7 +87,7 @@ if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
 
 // Helpers
 function infoAsAttachment(info) {
-	return new builder.HeroCard()
+	return new builder.ThumbnailCard()
 		.title(info.title)
 		.subtitle(info.release_date)
 		.text(info.overview)
