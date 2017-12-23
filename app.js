@@ -25,10 +25,11 @@ var bot = new builder.UniversalBot(connector, function (session) {
 var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
 bot.recognizer(recognizer);
 
-bot.dialog('Help', function (session) {
-	session.endDialog('Hi! Try asking me things like \'tell me about this movie\' or \'I want to know more about this actor\'');
-}).triggerAction({
-	matches: 'Help'
+bot.dialog('Help',
+	function (session) {
+		session.endDialog('Hi! Try asking me things like \'tell me about this movie\' or \'I want to know more about this actor\'');
+	}).triggerAction({
+		matches: 'Help'
 });
 
 // MOVIE ALL INFORMATIONS
@@ -49,6 +50,112 @@ bot.dialog('MovieGetAllInformations',
 		} else { Prompts.text(session, 'Please enter a film'); }
 	}).triggerAction({
 	matches: 'Movie.GetAllInformations'
+});
+
+bot.dialog('Movie.GetTrailer',
+    function (session, args, next) {
+        var movieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
+        if (movieEntity) {
+            MovieDB.searchMovie({ query: movieEntity.entity }, (err, res) => {
+              var movie = res.results[0];
+              var movies = [];
+              console.log(movie.id);
+              MovieDB.movieVideos({ id: movie.id }, (err, res) => {
+                var results = res.results;
+                var ytKey = "";
+                if(results.length > 1){
+                  for(var result in results){
+                    if(result.type == "Trailer"){
+                      ytKey = result.key;
+                    }
+                  }
+                }else{
+                  ytKey = results[0].key;
+                }
+				var info = {
+					movieTitle: movie.title,
+					ytKey: ytKey
+				}
+                var message = new builder.Message()
+                .addAttachment(trailerCard(info));
+                session.send(message);
+                session.endDialog();
+              });
+            });
+        }
+        else { Prompts.text(session, 'Please enter a film'); }
+    }).triggerAction({
+    matches: 'Movie.GetTrailer'
+});
+
+bot.dialog('Movie.GetSuggestion',
+	function (session, args, next) {
+			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
+				MovieDB.discoverMovie({}, (err, res) => {
+						displayMoviesGlobalInfos(session, res, 'Movie');
+				});
+			} else {
+				MovieDB.discoverTv({}, (err, res) => {
+					 displayMoviesGlobalInfos(session, res, 'Tv');
+				});
+			}
+
+	}).triggerAction({
+	matches: 'Movie.GetSuggestion'
+});
+
+bot.dialog('Movie.NowPlayingMovies',
+	function (session, args, next) {
+		MovieDB.miscNowPlayingMovies({}, (err, res) => {
+				displayMoviesGlobalInfos(session, res, 'Movie');
+		});
+	}).triggerAction({
+	matches: 'Movie.NowPlayingMovies'
+});
+
+bot.dialog('Movie.UpcomingMovies',
+	function (session, args, next) {
+		MovieDB.miscUpcomingMovies({}, (err, res) => {
+				displayMoviesGlobalInfos(session, res, 'Movie');
+		});
+	}).triggerAction({
+	matches: 'Movie.UpcomingMovies'
+});
+
+bot.dialog('VideoType.Popular',
+	function (session, args, next) {
+			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
+				MovieDB.miscPopularMovies({}, (err, res) => {
+						displayMoviesGlobalInfos(session, res, 'Movie');
+				});
+			} else {
+				MovieDB.miscPopularTvs({}, (err, res) => {
+					 displayMoviesGlobalInfos(session, res, 'Tv');
+				});
+			}
+
+	}).triggerAction({
+	matches: 'VideoType.Popular'
+});
+
+bot.dialog('VideoType.TopRated',
+	function (session, args, next) {
+			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
+				MovieDB.miscTopRatedMovies({}, (err, res) => {
+						displayMoviesGlobalInfos(session, res, 'Movie');
+				});
+			} else {
+				MovieDB.miscTopRatedTvs({}, (err, res) => {
+					 displayMoviesGlobalInfos(session, res, 'Tv');
+				});
+			}
+
+	}).triggerAction({
+	matches: 'VideoType.TopRated'
 });
 
 function displayMoviesGlobalInfos(session, res, videoType){
@@ -134,9 +241,18 @@ function infoAsAttachment(info) {
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
 }
+
 function infoAsAttachmentActor(info) {
 	return new builder.ThumbnailCard()
 		.title(info.name)
 		.text(info.known_for)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.profile_path)])
+}
+
+function trailerCard(info){
+	return new builder.VideoCard()
+		.title(info.movieTitle)
+		.media([
+			{ url: 'https://www.youtube.com/watch?v=' + info.ytKey }
+		]);
 }
