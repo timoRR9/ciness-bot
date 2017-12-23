@@ -31,6 +31,7 @@ bot.dialog('Help', function (session) {
 	matches: 'Help'
 });
 
+// MOVIE ALL INFORMATIONS
 bot.dialog('MovieGetAllInformations',
 	function (session, args, next) {
 		var movieTitle = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
@@ -67,6 +68,46 @@ function displayMoviesGlobalInfos(session, res, videoType){
 	}
 }
 
+// ACTOR ALL INFORMATIONS
+bot.dialog('ActorGetAllInformations',
+function (session, args, next) {
+	console.log(args.intent)
+	var actorName = builder.EntityRecognizer.findEntity(args.intent.entities, 'Actor.Name');
+	if (actorName) {
+		MovieDB.searchPerson({ query: actorName.entity }, (err, res) => {
+			displayActorGlobalInfos(session, res, 'Actor');
+		});
+	} else { Prompts.text(session, 'Please enter an actor'); }
+}).triggerAction({
+	matches: 'Actor.GetAllInformations'
+});
+
+function displayActorGlobalInfos(session, res, actors){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the ' + actors + ' called ' + actors.entity, session.message.text);
+		session.endDialog();
+	} else {
+		var actors = [];
+		for (var i = 0; i < res.results.length; i++) {
+			var known_for = '';
+			for (var index = 0; index < res.results[i].known_for.length; index++) {
+				if(res.results[i].known_for[index].title){
+					if(known_for == '') known_for += 'Know for : ';
+					known_for += res.results[i].known_for[index].title + ' (' + res.results[i].known_for[index].media_type + ')';
+					if(index < res.results[i].known_for.length - 1) known_for += ', ';
+				}
+			}
+			res.results[i].known_for = known_for;
+			actors.push(res.results[i]);
+		}
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(actors.map(infoAsAttachmentActor));
+		session.send(message);
+		session.endDialog();
+	}
+}
+
 // Spell Check
 if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
 	bot.use({
@@ -92,4 +133,10 @@ function infoAsAttachment(info) {
 		.subtitle(info.release_date)
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
+}
+function infoAsAttachmentActor(info) {
+	return new builder.ThumbnailCard()
+		.title(info.name)
+		.text(info.known_for)
+		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.profile_path)])
 }
