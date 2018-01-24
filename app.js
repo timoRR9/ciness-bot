@@ -186,6 +186,22 @@ bot.dialog('Movie.UpcomingMovies',
 	matches: 'Movie.UpcomingMovies'
 });
 
+bot.dialog('Movie.GetReviews',
+    function (session, args, next) {
+        var movieEnt = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
+        if (movieEnt) {
+          MovieDB.searchMovie({ query: movieEnt.entity }, (err, res) => {
+            var movie = res.results[0];
+            var movies = [];
+            MovieDB.movieReviews({ id: movie.id }, (err, res) => {
+							displayMoviesReviews(session, res);
+            });
+          });
+	      } else { prompts.text(session, 'Please enter a film'); }
+    }).triggerAction({
+    	matches: 'Movie.GetReviews'
+});
 // bot.dialog('Movie.GenreList',
 // 	function (session, args, next) {
 // 		MovieDB.genreList({}, (err, res) => {
@@ -247,6 +263,23 @@ function displayMoviesGlobalInfos(session, res, videoType){
 	}
 }
 
+function displayMoviesReviews(session, res){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
+		session.endDialog();
+	} else {
+		var movies = [];
+		for (var i = 0; i < res.results.length; i++) {
+			movies.push(res.results[i]);
+		}
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(movies.map(reviewAsAttachment));
+		session.send(message);
+		session.endDialog();
+	}
+}
+
 function displayActorGlobalInfos(session, res, actors){
 	if (res.results.length == 0){
 		session.send('Sorry, we did not found the ' + actors + ' called ' + actors.entity, session.message.text);
@@ -286,6 +319,12 @@ function infoAsAttachmentActor(info) {
 		.title(info.name)
 		.text(info.known_for)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.profile_path)])
+}
+
+function reviewAsAttachment(info) {
+	return new builder.ThumbnailCard()
+		.title(info.author)
+		.text(info.content)
 }
 
 function trailerCard(info){
