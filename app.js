@@ -220,17 +220,6 @@ bot.dialog('Serie.Similar',
     	matches: 'Serie.Similar'
 });
 
-// bot.dialog('Movie.GenreList',
-// 	function (session, args, next) {
-// 		MovieDB.genreList({}, (err, res) => {
-// 				// displayMoviesGlobalInfos(session, res, 'Movie');
-// 				console.log(res);
-// 		});
-// 	}).triggerAction({
-// 	matches: 'Movie.GenreList'
-// });
-
-
 // ACTOR INFORMATIONS
 bot.dialog('ActorGetAllInformations',
 	function (session, args, next) {
@@ -243,6 +232,15 @@ bot.dialog('ActorGetAllInformations',
 		} else { Prompts.text(session, 'Please enter an actor'); }
 	}).triggerAction({
 		matches: 'Actor.GetAllInformations'
+});
+
+bot.dialog('Actor.GetPopular',
+	function (session, args, next) {
+		MovieDB.personPopular({}, (err, res) => {
+			displayActorGlobalInfos(session, res, 'Actor');
+		});
+	}).triggerAction({
+		matches: 'Actor.GetPopular'
 });
 
 // Spell Check
