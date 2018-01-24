@@ -112,7 +112,7 @@ bot.dialog('VideoType.GetTrailer',
 							});
 						});
 					}
-	      } else { Prompts.text(session, 'Please enter a film'); }
+	      } else { prompts.text(session, 'Please enter a film'); }
     }).triggerAction({
     	matches: 'VideoType.GetTrailer'
 });
@@ -339,7 +339,7 @@ function displayActorGlobalInfos(session, res, actors){
 
 function infoAsAttachment(info) {
 	return new builder.ThumbnailCard()
-		.title(info.title)
+		.title(info.title ? info.title : info.title)
 		.subtitle(info.release_date)
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
