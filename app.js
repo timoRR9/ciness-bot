@@ -202,6 +202,24 @@ bot.dialog('Movie.GetReviews',
     }).triggerAction({
     	matches: 'Movie.GetReviews'
 });
+
+bot.dialog('Serie.Similar',
+    function (session, args, next) {
+        var serieEnt = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
+        if (serieEnt) {
+          MovieDB.searchTv({ query: serieEnt.entity }, (err, res) => {
+            var serie = res.results[0];
+            var movies = [];
+            MovieDB.tvSimilar({ id: serie.id }, (err, res) => {
+							displaySerieSimilar(session, res);
+            });
+          });
+	      } else { prompts.text(session, 'Please enter a film'); }
+    }).triggerAction({
+    	matches: 'Serie.Similar'
+});
+
 // bot.dialog('Movie.GenreList',
 // 	function (session, args, next) {
 // 		MovieDB.genreList({}, (err, res) => {
@@ -251,13 +269,9 @@ function displayMoviesGlobalInfos(session, res, videoType){
 		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
 		session.endDialog();
 	} else {
-		var movies = [];
-		for (var i = 0; i < res.results.length; i++) {
-			movies.push(res.results[i]);
-		}
 		var message = new builder.Message()
 		.attachmentLayout(builder.AttachmentLayout.carousel)
-		.attachments(movies.map(infoAsAttachment));
+		.attachments(res.results.map(infoAsAttachment));
 		session.send(message);
 		session.endDialog();
 	}
@@ -268,13 +282,22 @@ function displayMoviesReviews(session, res){
 		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
 		session.endDialog();
 	} else {
-		var movies = [];
-		for (var i = 0; i < res.results.length; i++) {
-			movies.push(res.results[i]);
-		}
 		var message = new builder.Message()
 		.attachmentLayout(builder.AttachmentLayout.carousel)
-		.attachments(movies.map(reviewAsAttachment));
+		.attachments(res.results.map(reviewAsAttachment));
+		session.send(message);
+		session.endDialog();
+	}
+}
+
+function displaySerieSimilar(session, res){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the serie called ' + movieTitle.entity, session.message.text);
+		session.endDialog();
+	} else {
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(res.results.map(similarAsAttachment));
 		session.send(message);
 		session.endDialog();
 	}
@@ -310,6 +333,14 @@ function infoAsAttachment(info) {
 	return new builder.ThumbnailCard()
 		.title(info.title)
 		.subtitle(info.release_date)
+		.text(info.overview)
+		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
+}
+
+function similarAsAttachment(info) {
+	return new builder.ThumbnailCard()
+		.title(info.name)
+		.subtitle(info.first_air_date)
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
 }
