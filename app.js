@@ -339,7 +339,7 @@ function displayActorGlobalInfos(session, res, actors){
 
 function infoAsAttachment(info) {
 	return new builder.ThumbnailCard()
-		.title(info.title ? info.title : info.title)
+		.title(info.title ? info.title : info.name)
 		.subtitle(info.release_date)
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
