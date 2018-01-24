@@ -203,21 +203,31 @@ bot.dialog('Movie.GetReviews',
     	matches: 'Movie.GetReviews'
 });
 
-bot.dialog('Serie.Similar',
+bot.dialog('VideoType.GetSimilar',
     function (session, args, next) {
-        var serieEnt = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
-        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
-        if (serieEnt) {
-          MovieDB.searchTv({ query: serieEnt.entity }, (err, res) => {
-            var serie = res.results[0];
-            var movies = [];
-            MovieDB.tvSimilar({ id: serie.id }, (err, res) => {
-							displaySerieSimilar(session, res);
-            });
-          });
+        var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+        var videoEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+        if (videoEntity) {
+					if (videoType.entity !== 'movie' || videoType.entity !== 'movies' || videoType.entity !== 'film' || videoType.entity !== 'films') {
+	          MovieDB.searchTv({ query: videoEntity.entity }, (err, res) => {
+	            var serie = res.results[0];
+	            var movies = [];
+	            MovieDB.tvSimilar({ id: serie.id }, (err, res) => {
+								displayVideoSimilar(session, res);
+	            });
+	          });
+					} else {
+						MovieDB.searchMovie({ query: videoEntity.entity }, (err, res) => {
+						 var serie = res.results[0];
+						 var movies = [];
+						 MovieDB.movieSimilar({ id: serie.id }, (err, res) => {
+							 displayVideoSimilar(session, res);
+						 });
+					 });
+					}
 	      } else { prompts.text(session, 'Please enter a film'); }
     }).triggerAction({
-    	matches: 'Serie.Similar'
+    	matches: 'VideoType.GetSimilar'
 });
 
 // ACTOR INFORMATIONS
@@ -288,7 +298,7 @@ function displayMoviesReviews(session, res){
 	}
 }
 
-function displaySerieSimilar(session, res){
+function displayVideoSimilar(session, res){
 	if (res.results.length == 0){
 		session.send('Sorry, we did not found the serie called ' + movieTitle.entity, session.message.text);
 		session.endDialog();
