@@ -27,7 +27,7 @@ bot.recognizer(recognizer);
 
 bot.dialog('Help',
 	function (session) {
-		session.endDialog('Hi! Try asking me things like \'tell me about this movie\' or \'I want to know more about this actor\'');
+		session.endDialog('Hi! Try asking me things like \'tell me about *movie title* movie/tv\' or \'who is the actor *actor name*\'');
 	}).triggerAction({
 		matches: 'Help'
 });
