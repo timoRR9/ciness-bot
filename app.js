@@ -99,6 +99,7 @@ bot.dialog('VideoType.GetInformations', [
 	matches: 'VideoType.GetInformations'
 });
 
+// MOVIE / TV SHOW SUGGESTION
 bot.dialog('VideoType.GetSuggestion', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
@@ -163,6 +164,7 @@ bot.dialog('VideoType.GetSuggestion', [
 	matches: 'VideoType.GetSuggestion'
 });
 
+// MOVIE / TV SHOW Popular
 bot.dialog('VideoType.Popular', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
@@ -227,6 +229,7 @@ bot.dialog('VideoType.Popular', [
 	matches: 'VideoType.Popular'
 });
 
+// MOVIE / TV SHOW TOP RATED
 bot.dialog('VideoType.TopRated', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
@@ -289,6 +292,7 @@ bot.dialog('VideoType.TopRated', [
 	matches: 'VideoType.TopRated'
 });
 
+// MOVIE / TV SHOW NOW PLAYING MOVIES
 bot.dialog('Movie.NowPlayingMovies', [
 	function (session, args, next) {
 		MovieDB.miscNowPlayingMovies({}, (err, res) => {
@@ -321,6 +325,7 @@ bot.dialog('Movie.NowPlayingMovies', [
 	matches: 'Movie.NowPlayingMovies'
 });
 
+// MOVIE / TV SHOW UP COMING MOVIES
 bot.dialog('Movie.UpcomingMovies', [
 	function (session, args, next) {
 		MovieDB.miscUpcomingMovies({}, (err, res) => {
@@ -353,6 +358,7 @@ bot.dialog('Movie.UpcomingMovies', [
 	matches: 'Movie.UpcomingMovies'
 });
 
+// MOVIE SHOW REVIEWS
 bot.dialog('Movie.GetReviews',
     function (session, args, next) {
         var movieEnt = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Title');
@@ -370,6 +376,7 @@ bot.dialog('Movie.GetReviews',
     	matches: 'Movie.GetReviews'
 });
 
+// MOVIE / TV SHOW SIMILAR
 bot.dialog('VideoType.GetSimilar',
     function (session, args, next) {
         var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
