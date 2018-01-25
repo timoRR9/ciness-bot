@@ -47,7 +47,7 @@ bot.dialog('VideoType.GetInformations',
 					displayMoviesGlobalInfos(session, res, 'Tv show');
 				});
 			}
-		} else { Prompts.text(session, 'Please enter a film'); }
+		} else { builder.Prompts.text(session, 'Sorry I didn\'t understand the movie/serie you\'re talking about..'); }
 	}).triggerAction({
 	matches: 'VideoType.GetInformations'
 });
@@ -112,7 +112,7 @@ bot.dialog('VideoType.GetTrailer',
 							});
 						});
 					}
-	      } else { prompts.text(session, 'Please enter a film'); }
+	      } else { builder.prompts.text(session, 'Sorry I didn\'t understand the movie/serie you\'re talking about..'); }
     }).triggerAction({
     	matches: 'VideoType.GetTrailer'
 });
@@ -198,7 +198,7 @@ bot.dialog('Movie.GetReviews',
 							displayMoviesReviews(session, res);
             });
           });
-	      } else { prompts.text(session, 'Please enter a film'); }
+	      } else { builder.prompts.text(session, 'Sorry I didn\'t understand the movie you\'re talking about..'); }
     }).triggerAction({
     	matches: 'Movie.GetReviews'
 });
@@ -225,7 +225,7 @@ bot.dialog('VideoType.GetSimilar',
 						 });
 					 });
 					}
-	      } else { prompts.text(session, 'Please enter a film'); }
+	      } else { prompts.text(session, 'Sorry I didn\'t understand the movie/serie you\'re talking about..'); }
     }).triggerAction({
     	matches: 'VideoType.GetSimilar'
 });
@@ -239,7 +239,7 @@ bot.dialog('ActorGetAllInformations',
 			MovieDB.searchPerson({ query: actorName.entity }, (err, res) => {
 				displayActorGlobalInfos(session, res, 'Actor');
 			});
-		} else { Prompts.text(session, 'Please enter an actor'); }
+		} else { builder.Prompts.text(session, 'Please enter an actor'); }
 	}).triggerAction({
 		matches: 'Actor.GetAllInformations'
 });
