@@ -27,17 +27,18 @@ bot.recognizer(recognizer);
 
 bot.dialog('Help',
 	function (session) {
-		session.endDialog('Hi! Try asking me things like \'tell me about this movie\' or \'I want to know more about this actor\'');
+		session.endDialog('Hi! Try asking me things like \'tell me about *movie title* movie/tv\' or \'who is the actor *actor name*\'');
 	}).triggerAction({
 		matches: 'Help'
 });
 
-// MOVIE ALL INFORMATIONS
-bot.dialog('MovieGetAllInformations',
+// MOVIE / TV SHOW INFORMATIONS
+bot.dialog('VideoType.GetInformations', [
 	function (session, args, next) {
-		var movieTitle = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
+		var movieTitle = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Title');
 		var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
 		if (movieTitle) {
+			 session.dialogData.type = videoType.entity;
 			if (videoType.entity == 'movie') {
 				MovieDB.searchMovie({ query: movieTitle.entity }, (err, res) => {
 					displayMoviesGlobalInfos(session, res, 'Movie');
@@ -47,51 +48,62 @@ bot.dialog('MovieGetAllInformations',
 					displayMoviesGlobalInfos(session, res, 'Tv show');
 				});
 			}
-		} else { Prompts.text(session, 'Please enter a film'); }
-	}).triggerAction({
-	matches: 'Movie.GetAllInformations'
-});
-
-bot.dialog('Movie.GetTrailer',
-    function (session, args, next) {
-        var movieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Movie.Title');
-        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
-        if (movieEntity) {
-            MovieDB.searchMovie({ query: movieEntity.entity }, (err, res) => {
-              var movie = res.results[0];
-              var movies = [];
-              console.log(movie.id);
-              MovieDB.movieVideos({ id: movie.id }, (err, res) => {
-                var results = res.results;
-                var ytKey = "";
-                if(results.length > 1){
-                  for(var result in results){
-                    if(result.type == "Trailer"){
-                      ytKey = result.key;
-                    }
-                  }
-                }else{
-                  ytKey = results[0].key;
-                }
+			 builder.Prompts.text(session, "Here is what we found : ");
+		} else { builder.Prompts.text(session, 'Sorry I didn\'t understand the movie/serie you\'re talking about..'); }
+	},
+	function (session, results) {
+		if (session.dialogData.type == 'movie') {
+			MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
 				var info = {
-					movieTitle: movie.title,
 					ytKey: ytKey
 				}
-                var message = new builder.Message()
-                .addAttachment(trailerCard(info));
-                session.send(message);
-                session.endDialog();
-              });
-            });
-        }
-        else { Prompts.text(session, 'Please enter a film'); }
-    }).triggerAction({
-    matches: 'Movie.GetTrailer'
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		} else {
+			MovieDB.tvVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		}
+	}]).triggerAction({
+	matches: 'VideoType.GetInformations'
 });
 
-bot.dialog('Movie.GetSuggestion',
+// MOVIE / TV SHOW SUGGESTION
+bot.dialog('VideoType.GetSuggestion', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			session.dialogData.type = videoType.entity;
 			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
 				MovieDB.discoverMovie({}, (err, res) => {
 						displayMoviesGlobalInfos(session, res, 'Movie');
@@ -101,32 +113,62 @@ bot.dialog('Movie.GetSuggestion',
 					 displayMoviesGlobalInfos(session, res, 'Tv');
 				});
 			}
-
-	}).triggerAction({
-	matches: 'Movie.GetSuggestion'
+			builder.Prompts.text(session, "Here is what we found : ");
+	},
+	function (session, results) {
+		if (session.dialogData.type == 'movie') {
+			MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		} else {
+			MovieDB.tvVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		}
+	}
+ ]).triggerAction({
+	matches: 'VideoType.GetSuggestion'
 });
 
-bot.dialog('Movie.NowPlayingMovies',
-	function (session, args, next) {
-		MovieDB.miscNowPlayingMovies({}, (err, res) => {
-				displayMoviesGlobalInfos(session, res, 'Movie');
-		});
-	}).triggerAction({
-	matches: 'Movie.NowPlayingMovies'
-});
-
-bot.dialog('Movie.UpcomingMovies',
-	function (session, args, next) {
-		MovieDB.miscUpcomingMovies({}, (err, res) => {
-				displayMoviesGlobalInfos(session, res, 'Movie');
-		});
-	}).triggerAction({
-	matches: 'Movie.UpcomingMovies'
-});
-
-bot.dialog('VideoType.Popular',
+// MOVIE / TV SHOW Popular
+bot.dialog('VideoType.Popular', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			session.dialogData.type = videoType.entity;
 			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
 				MovieDB.miscPopularMovies({}, (err, res) => {
 						displayMoviesGlobalInfos(session, res, 'Movie');
@@ -136,14 +178,62 @@ bot.dialog('VideoType.Popular',
 					 displayMoviesGlobalInfos(session, res, 'Tv');
 				});
 			}
-
-	}).triggerAction({
+			builder.Prompts.text(session, "Here is what we found : ");
+	},
+	function (session, results) {
+		if (session.dialogData.type == 'movie') {
+			MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		} else {
+			MovieDB.tvVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		}
+	}
+ ]).triggerAction({
 	matches: 'VideoType.Popular'
 });
 
-bot.dialog('VideoType.TopRated',
+// MOVIE / TV SHOW TOP RATED
+bot.dialog('VideoType.TopRated', [
 	function (session, args, next) {
 			var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+			session.dialogData.type = videoType.entity;
 			if (videoType.entity == 'movie' || videoType.entity == 'movies' || videoType.entity == 'film' || videoType.entity == 'films') {
 				MovieDB.miscTopRatedMovies({}, (err, res) => {
 						displayMoviesGlobalInfos(session, res, 'Movie');
@@ -153,41 +243,246 @@ bot.dialog('VideoType.TopRated',
 					 displayMoviesGlobalInfos(session, res, 'Tv');
 				});
 			}
-
-	}).triggerAction({
+	},
+	function (session, results) {
+		if (session.dialogData.type == 'movie') {
+			MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		} else {
+			MovieDB.tvVideos({ id: parseInt(results.response) }, (err, res) => {
+				var results = res.results;
+				var ytKey = "";
+				if(results.length > 1){
+					for(var result in results){
+						if(result.type == "Trailer"){
+							ytKey = result.key;
+						}
+					}
+				} else {
+					ytKey = results[0].key;
+				}
+				var info = {
+					ytKey: ytKey
+				}
+				var message = new builder.Message()
+				.addAttachment(trailerCard(info));
+				session.send(message);
+				session.endDialog();
+			});
+		}
+	}]).triggerAction({
 	matches: 'VideoType.TopRated'
 });
 
+// MOVIE / TV SHOW NOW PLAYING MOVIES
+bot.dialog('Movie.NowPlayingMovies', [
+	function (session, args, next) {
+		MovieDB.miscNowPlayingMovies({}, (err, res) => {
+				displayMoviesGlobalInfos(session, res, 'Movie');
+		});
+		builder.Prompts.text(session, "Here is what we found : ");
+	},
+	function (session, results) {
+		MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+			var results = res.results;
+			var ytKey = "";
+			if(results.length > 1){
+				for(var result in results){
+					if(result.type == "Trailer"){
+						ytKey = result.key;
+					}
+				}
+			} else {
+				ytKey = results[0].key;
+			}
+			var info = {
+				ytKey: ytKey
+			}
+			var message = new builder.Message()
+			.addAttachment(trailerCard(info));
+			session.send(message);
+			session.endDialog();
+		});
+	}]).triggerAction({
+	matches: 'Movie.NowPlayingMovies'
+});
+
+// MOVIE / TV SHOW UP COMING MOVIES
+bot.dialog('Movie.UpcomingMovies', [
+	function (session, args, next) {
+		MovieDB.miscUpcomingMovies({}, (err, res) => {
+				displayMoviesGlobalInfos(session, res, 'Movie');
+		});
+		builder.Prompts.text(session, "Here is what we found : ");
+	},
+	function (session, results) {
+		MovieDB.movieVideos({ id: parseInt(results.response) }, (err, res) => {
+			var results = res.results;
+			var ytKey = "";
+			if(results.length > 1){
+				for(var result in results){
+					if(result.type == "Trailer"){
+						ytKey = result.key;
+					}
+				}
+			} else {
+				ytKey = results[0].key;
+			}
+			var info = {
+				ytKey: ytKey
+			}
+			var message = new builder.Message()
+			.addAttachment(trailerCard(info));
+			session.send(message);
+			session.endDialog();
+		});
+	}]).triggerAction({
+	matches: 'Movie.UpcomingMovies'
+});
+
+// MOVIE SHOW REVIEWS
+bot.dialog('Movie.GetReviews',
+    function (session, args, next) {
+        var movieEnt = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Title');
+        //var serieEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'SerieTitle');
+        if (movieEnt) {
+          MovieDB.searchMovie({ query: movieEnt.entity }, (err, res) => {
+            var movie = res.results[0];
+            var movies = [];
+            MovieDB.movieReviews({ id: movie.id }, (err, res) => {
+							displayMoviesReviews(session, res);
+            });
+          });
+	      } else { builder.prompts.text(session, 'Sorry I didn\'t understand the movie you\'re talking about..'); }
+    }).triggerAction({
+    	matches: 'Movie.GetReviews'
+});
+
+// MOVIE / TV SHOW SIMILAR
+bot.dialog('VideoType.GetSimilar',
+    function (session, args, next) {
+        var videoType = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Type');
+        var videoEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Video.Title');
+        if (videoEntity) {
+					if (videoType.entity !== 'movie' || videoType.entity !== 'movies' || videoType.entity !== 'film' || videoType.entity !== 'films') {
+	          MovieDB.searchTv({ query: videoEntity.entity }, (err, res) => {
+	            var serie = res.results[0];
+	            var movies = [];
+	            MovieDB.tvSimilar({ id: serie.id }, (err, res) => {
+								displayVideoSimilar(session, res);
+	            });
+	          });
+					} else {
+						MovieDB.searchMovie({ query: videoEntity.entity }, (err, res) => {
+						 var serie = res.results[0];
+						 var movies = [];
+						 MovieDB.movieSimilar({ id: serie.id }, (err, res) => {
+							 displayVideoSimilar(session, res);
+						 });
+					 });
+					}
+	      } else { prompts.text(session, 'Sorry I didn\'t understand the movie/serie you\'re talking about..'); }
+    }).triggerAction({
+    	matches: 'VideoType.GetSimilar'
+});
+
+// ACTOR INFORMATIONS
+bot.dialog('ActorGetAllInformations',
+	function (session, args, next) {
+		console.log(args.intent)
+		var actorName = builder.EntityRecognizer.findEntity(args.intent.entities, 'Actor.Name');
+		if (actorName) {
+			MovieDB.searchPerson({ query: actorName.entity }, (err, res) => {
+				displayActorGlobalInfos(session, res, 'Actor');
+			});
+		} else { builder.Prompts.text(session, 'Please enter an actor'); }
+	}).triggerAction({
+		matches: 'Actor.GetAllInformations'
+});
+
+bot.dialog('Actor.GetPopular',
+	function (session, args, next) {
+		MovieDB.personPopular({}, (err, res) => {
+			displayActorGlobalInfos(session, res, 'Actor');
+		});
+	}).triggerAction({
+		matches: 'Actor.GetPopular'
+});
+
+// Spell Check
+if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
+	bot.use({
+		botbuilder: function (session, next) {
+			spellService
+				.getCorrectedText(session.message.text)
+				.then(function (text) {
+					session.message.text = text;
+					next();
+				})
+				.catch(function (error) {
+					console.error(error);
+					next();
+				});
+		}
+	});
+}
+
+// Helpers
 function displayMoviesGlobalInfos(session, res, videoType){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the ' + videoType, session.message.text);
+		session.endDialog();
+	} else {
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(res.results.map(infoAsAttachment));
+		session.send(message);
+	}
+}
+
+function displayMoviesReviews(session, res){
 	if (res.results.length == 0){
 		session.send('Sorry, we did not found the ' + videoType + ' called ' + movieTitle.entity, session.message.text);
 		session.endDialog();
 	} else {
-		var movies = [];
-		for (var i = 0; i < res.results.length; i++) {
-			movies.push(res.results[i]);
-		}
 		var message = new builder.Message()
 		.attachmentLayout(builder.AttachmentLayout.carousel)
-		.attachments(movies.map(infoAsAttachment));
+		.attachments(res.results.map(reviewAsAttachment));
 		session.send(message);
 		session.endDialog();
 	}
 }
 
-// ACTOR ALL INFORMATIONS
-bot.dialog('ActorGetAllInformations',
-function (session, args, next) {
-	console.log(args.intent)
-	var actorName = builder.EntityRecognizer.findEntity(args.intent.entities, 'Actor.Name');
-	if (actorName) {
-		MovieDB.searchPerson({ query: actorName.entity }, (err, res) => {
-			displayActorGlobalInfos(session, res, 'Actor');
-		});
-	} else { Prompts.text(session, 'Please enter an actor'); }
-}).triggerAction({
-	matches: 'Actor.GetAllInformations'
-});
+function displayVideoSimilar(session, res){
+	if (res.results.length == 0){
+		session.send('Sorry, we did not found the serie called ' + movieTitle.entity, session.message.text);
+		session.endDialog();
+	} else {
+		var message = new builder.Message()
+		.attachmentLayout(builder.AttachmentLayout.carousel)
+		.attachments(res.results.map(similarAsAttachment));
+		session.send(message);
+		session.endDialog();
+	}
+}
 
 function displayActorGlobalInfos(session, res, actors){
 	if (res.results.length == 0){
@@ -215,29 +510,19 @@ function displayActorGlobalInfos(session, res, actors){
 	}
 }
 
-// Spell Check
-if (process.env.IS_SPELL_CORRECTION_ENABLED === 'true') {
-	bot.use({
-		botbuilder: function (session, next) {
-			spellService
-				.getCorrectedText(session.message.text)
-				.then(function (text) {
-					session.message.text = text;
-					next();
-				})
-				.catch(function (error) {
-					console.error(error);
-					next();
-				});
-		}
-	});
-}
-
-// Helpers
 function infoAsAttachment(info) {
 	return new builder.ThumbnailCard()
-		.title(info.title)
-		.subtitle(info.release_date)
+	    .title(info.title ? info.title : info.name)
+	    .subtitle(info.release_date)
+	    .text(info.overview)
+	    .images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
+			.buttons([builder.CardAction.imBack(null, info.id.toString(), 'Trailer')])
+}
+
+function similarAsAttachment(info) {
+	return new builder.ThumbnailCard()
+		.title(info.name)
+		.subtitle(info.first_air_date)
 		.text(info.overview)
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.poster_path)])
 }
@@ -249,9 +534,14 @@ function infoAsAttachmentActor(info) {
 		.images([new builder.CardImage().url('https://image.tmdb.org/t/p/w150/'+info.profile_path)])
 }
 
+function reviewAsAttachment(info) {
+	return new builder.ThumbnailCard()
+		.title(info.author)
+		.text(info.content)
+}
+
 function trailerCard(info){
 	return new builder.VideoCard()
-		.title(info.movieTitle)
 		.media([
 			{ url: 'https://www.youtube.com/watch?v=' + info.ytKey }
 		]);

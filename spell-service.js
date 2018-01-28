@@ -1,6 +1,6 @@
 var request = require('request');
 
-var SPELL_CHECK_API_URL = 'https://api.cognitive.microsoft.com/bing/v5.0/spellcheck/?form=BCSSCK',
+var SPELL_CHECK_API_URL = 'https://api.cognitive.microsoft.com/bing/v7.0/spellcheck',
     SPELL_CHECK_API_KEY = process.env.BING_SPELL_CHECK_API_KEY;
 
 /**
