@@ -1,0 +1,1148 @@
+{
+  "luis_schema_version": "2.1.0",
+  "versionId": "0.1",
+  "name": "Ciness",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Actor.GetAllInformations"
+    },
+    {
+      "name": "Actor.GetPopular"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "Movie.GetReviews"
+    },
+    {
+      "name": "Movie.NowPlayingMovies"
+    },
+    {
+      "name": "Movie.UpcomingMovies"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "VideoType.GetInformations"
+    },
+    {
+      "name": "VideoType.GetSimilar"
+    },
+    {
+      "name": "VideoType.GetSuggestion"
+    },
+    {
+      "name": "VideoType.GetTrailer"
+    },
+    {
+      "name": "VideoType.Popular"
+    },
+    {
+      "name": "VideoType.TopRated"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Actor.Name"
+    },
+    {
+      "name": "Video.Title"
+    },
+    {
+      "name": "Video.Type"
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [],
+  "model_features": [
+    {
+      "name": "best",
+      "mode": true,
+      "words": "best,top rated,greatest,highest rated,top,finest",
+      "activated": true
+    },
+    {
+      "name": "popular",
+      "mode": true,
+      "words": "most popular,most requested,most loved,most talked,most discussed,most famous,most hyped,most successful",
+      "activated": true
+    },
+    {
+      "name": "reviews",
+      "mode": true,
+      "words": "reviews,critics,commenters",
+      "activated": true
+    },
+    {
+      "name": "willing",
+      "mode": true,
+      "words": "want to know,want to see,want to find out,wish to see,would like to",
+      "activated": true
+    }
+  ],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what can i do ?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "suggest me a movie",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "harry potter",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "open my apps",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "delete any adult movie",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "let me remove all sex videos",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i want to erase all adult videos",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "remove for me any sex movie",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what is your suggestion for a movie",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 30,
+          "endPos": 34
+        }
+      ]
+    },
+    {
+      "text": "what movie do you suggest ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 5,
+          "endPos": 9
+        }
+      ]
+    },
+    {
+      "text": "can you suggest me some movies ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 24,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "what movies do you suggest ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 5,
+          "endPos": 10
+        }
+      ]
+    },
+    {
+      "text": "what is your suggestion for movies ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 28,
+          "endPos": 33
+        }
+      ]
+    },
+    {
+      "text": "do you have any suggestion for a movie ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 33,
+          "endPos": 37
+        }
+      ]
+    },
+    {
+      "text": "have you any movie to suggest ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "can you tell me the movies still playing ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "what movie are coming soon ?",
+      "intent": "Movie.UpcomingMovies",
+      "entities": []
+    },
+    {
+      "text": "give me the list of the upcoming movies",
+      "intent": "Movie.UpcomingMovies",
+      "entities": []
+    },
+    {
+      "text": "what are the upcoming movies ?",
+      "intent": "Movie.UpcomingMovies",
+      "entities": []
+    },
+    {
+      "text": "give me the most popular movies",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 25,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "get me the list of the most popular movies",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 36,
+          "endPos": 41
+        }
+      ]
+    },
+    {
+      "text": "what are the top rated movies ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 23,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "give me the top rated movies",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 22,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "can you show me the top rated movies ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 30,
+          "endPos": 35
+        }
+      ]
+    },
+    {
+      "text": "which movies are top rated ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 6,
+          "endPos": 11
+        }
+      ]
+    },
+    {
+      "text": "can you show me the top rated series ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 30,
+          "endPos": 35
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about georges lucas",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 26,
+          "endPos": 38
+        }
+      ]
+    },
+    {
+      "text": "can you suggest me a movie ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 21,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "have you any show to suggest ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 13,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "can you suggest me a serie ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 21,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about depardieu",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 26,
+          "endPos": 34
+        }
+      ]
+    },
+    {
+      "text": "can you suggest me some movie ?",
+      "intent": "VideoType.GetSuggestion",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 24,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "show me the top rated movie",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 22,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "who are the current best actors ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "which actor is popular ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "who are the most popular actors ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "i want to know more about *depp*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 27,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *pitt*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *clooney*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 24
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about *reno*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 27,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *depp*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about *george clooney* actor",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 27,
+          "endPos": 40
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about the actor *capprio*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 37,
+          "endPos": 43
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about the actor *pitts*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 37,
+          "endPos": 41
+        }
+      ]
+    },
+    {
+      "text": "who is *george clooney* actor ?",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 8,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "i want to know more about *clooney* acto",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 27,
+          "endPos": 33
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *julia roberts*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *jean reno*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "who is the actor *brad pitt*",
+      "intent": "Actor.GetAllInformations",
+      "entities": [
+        {
+          "entity": "Actor.Name",
+          "startPos": 18,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "tell me about *godzilla* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 25,
+          "endPos": 29
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "can i have all informations about *batman* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 43,
+          "endPos": 47
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 35,
+          "endPos": 40
+        }
+      ]
+    },
+    {
+      "text": "tell me about *batman 2* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 25,
+          "endPos": 29
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "tell me about *spiderman* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 26,
+          "endPos": 30
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "about *batman* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 15,
+          "endPos": 19
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 7,
+          "endPos": 12
+        }
+      ]
+    },
+    {
+      "text": "what about *viking* show",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 20,
+          "endPos": 23
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 12,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "show me the informations about *spiderman* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 43,
+          "endPos": 47
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 32,
+          "endPos": 40
+        }
+      ]
+    },
+    {
+      "text": "i would like to see the informations about *shrek* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 51,
+          "endPos": 55
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 44,
+          "endPos": 48
+        }
+      ]
+    },
+    {
+      "text": "what about *stranger things* tv",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 29,
+          "endPos": 30
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 12,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "tell me about *hunger games* movie",
+      "intent": "VideoType.GetInformations",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 29,
+          "endPos": 33
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "give me the series similar to *peaky blinders*",
+      "intent": "VideoType.GetSimilar",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 12,
+          "endPos": 17
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 31,
+          "endPos": 44
+        }
+      ]
+    },
+    {
+      "text": "which serie is similar to *the big bang theory*",
+      "intent": "VideoType.GetSimilar",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 6,
+          "endPos": 10
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 27,
+          "endPos": 45
+        }
+      ]
+    },
+    {
+      "text": "what are the reviews for *batman*?",
+      "intent": "Movie.GetReviews",
+      "entities": [
+        {
+          "entity": "Video.Title",
+          "startPos": 26,
+          "endPos": 31
+        }
+      ]
+    },
+    {
+      "text": "do you have *movie* reviews ?",
+      "intent": "Movie.GetReviews",
+      "entities": [
+        {
+          "entity": "Video.Title",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "give me *movie* reviews",
+      "intent": "Movie.GetReviews",
+      "entities": [
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "give me *hunger games* reviews",
+      "intent": "Movie.GetReviews",
+      "entities": [
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "i want *spiderman 3* reviews please",
+      "intent": "Movie.GetReviews",
+      "entities": [
+        {
+          "entity": "Video.Title",
+          "startPos": 8,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "what are the best series ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 18,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "show me the best series",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 17,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "which series is the best ?",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 6,
+          "endPos": 11
+        }
+      ]
+    },
+    {
+      "text": "give me the top series",
+      "intent": "VideoType.TopRated",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 16,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "which actors are in ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "who are the most loved actors ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "give me the list of the current actors",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "get me the list of popular actors",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "who is popular ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "what about current actors ?",
+      "intent": "Actor.GetPopular",
+      "entities": []
+    },
+    {
+      "text": "i want to see movies like butterfly effect",
+      "intent": "VideoType.GetSimilar",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 14,
+          "endPos": 19
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 26,
+          "endPos": 41
+        }
+      ]
+    },
+    {
+      "text": "find me a film similar to the lord of the ring",
+      "intent": "VideoType.GetSimilar",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 10,
+          "endPos": 13
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 26,
+          "endPos": 45
+        }
+      ]
+    },
+    {
+      "text": "find me tv show like vikings",
+      "intent": "VideoType.GetSimilar",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 8,
+          "endPos": 14
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 21,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "what are the movies soon to be release ?",
+      "intent": "Movie.UpcomingMovies",
+      "entities": []
+    },
+    {
+      "text": "what is on display ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "what's on the billboard ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "tell me the movies currently in theater",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "which movies are on diplay ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "which movies are playing right now ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "which movies are still in theater ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "which movies have just been released ?",
+      "intent": "Movie.NowPlayingMovies",
+      "entities": []
+    },
+    {
+      "text": "which movies are the most popular ?",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 6,
+          "endPos": 11
+        }
+      ]
+    },
+    {
+      "text": "which are the most popular movies ?",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 27,
+          "endPos": 32
+        }
+      ]
+    },
+    {
+      "text": "which series is famous right now ?",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 6,
+          "endPos": 11
+        }
+      ]
+    },
+    {
+      "text": "is there a list of the series tendances ?",
+      "intent": "VideoType.Popular",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 23,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "i want to see *batman* show trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 23,
+          "endPos": 26
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "i want to see *spiderman 3* show preview",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 28,
+          "endPos": 31
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 15,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "i want to watch *batman* movie trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 25,
+          "endPos": 29
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 17,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "show me *spiderman* movie trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 20,
+          "endPos": 24
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "show me *batman* movie preview",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 17,
+          "endPos": 21
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "show me *batman* show trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 17,
+          "endPos": 20
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "show me *spiderman* show trailer user",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 20,
+          "endPos": 23
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "show me *spiderman* show trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 20,
+          "endPos": 23
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 9,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "i want to watch *spiderman* movie trailer",
+      "intent": "VideoType.GetTrailer",
+      "entities": [
+        {
+          "entity": "Video.Type",
+          "startPos": 28,
+          "endPos": 32
+        },
+        {
+          "entity": "Video.Title",
+          "startPos": 17,
+          "endPos": 25
+        }
+      ]
+    }
+  ]
+}
